@@ -4,12 +4,32 @@
 #define MAX_LINE_LEN 1024
 
 int spin_dial(int* position, char direction, int spin, int dial_length) {
+    int pos = *position;
+    int crosses;
 
-    int factor = (direction == 'R') ? 1 : -1;
-    *position = (*position + (spin * factor)) % dial_length;
+    if (direction == 'R') {
+        // Movimento in avanti
+        crosses = (pos + spin) / dial_length;
 
-    return *position == 0 ? 1 : 0;
+        pos = (pos + spin) % dial_length;
+    } 
+    else if (direction == 'L') {
+        // Converti a movimento in avanti nello "spazio riflesso"
+        int pos_f = (dial_length - pos) % dial_length;
+
+        crosses = (pos_f + spin) / dial_length;
+
+        // Aggiorna la posizione reale andando indietro
+        pos = (pos - spin) % dial_length;
+        if (pos < 0) {
+            pos += dial_length;
+        }
+    }
+
+    *position = pos;
+    return crosses;
 }
+
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -40,7 +60,7 @@ int main(int argc, char *argv[]) {
         
         times_hit_zero+= spin_dial(&position, direction, spin, dial_length);
     }
-    printf("Totale volte raggiunto zero: %d\n", times_hit_zero);
+    printf("Totale volte passato lo zero: %d\n", times_hit_zero);
 
     fclose(fp);
     return 0;
