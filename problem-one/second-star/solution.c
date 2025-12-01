@@ -8,23 +8,24 @@ int spin_dial(int* position, char direction, int spin, int dial_length) {
     int crosses;
 
     if (direction == 'R') {
-        // Movimento in avanti
+        // Forward movement
         crosses = (pos + spin) / dial_length;
 
         pos = (pos + spin) % dial_length;
     } 
-    else if (direction == 'L') {
-        // Converti a movimento in avanti nello "spazio riflesso"
+    else if (direction == 'L') {        
+        // Convert backward movement to forward in "reflected space"
         int pos_f = (dial_length - pos) % dial_length;
 
         crosses = (pos_f + spin) / dial_length;
-
-        // Aggiorna la posizione reale andando indietro
+        
+        // Update the real position going backward
         pos = (pos - spin) % dial_length;
         if (pos < 0) {
             pos += dial_length;
         }
-    }
+    } 
+
 
     *position = pos;
     return crosses;
@@ -33,13 +34,13 @@ int spin_dial(int* position, char direction, int spin, int dial_length) {
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        fprintf(stderr, "Uso: %s <nome_file>\n", argv[0]);
+        fprintf(stderr, "Use: %s <file_name>\n", argv[0]);
         return 1;
     }
 
     FILE *fp = fopen(argv[1], "r");
     if (!fp) {
-        perror("Errore nell'apertura del file");
+        perror("Error opening file");
         return 1;
     }
 
@@ -53,14 +54,14 @@ int main(int argc, char *argv[]) {
     int times_hit_zero = 0;
     while (fgets(buffer, MAX_LINE_LEN, fp) != NULL) {
         if (sscanf(buffer, " %c%d", &direction, &spin) != 2) {
-            fprintf(stderr, "Riga non valida: %s", buffer);
+            fprintf(stderr, "Invalid row: %s", buffer);
             fclose(fp);
             return 0;
         }        
         
         times_hit_zero+= spin_dial(&position, direction, spin, dial_length);
     }
-    printf("Totale volte passato lo zero: %d\n", times_hit_zero);
+    printf("Password: %d\n", times_hit_zero);
 
     fclose(fp);
     return 0;
