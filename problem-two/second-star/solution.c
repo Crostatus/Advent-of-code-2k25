@@ -16,18 +16,6 @@ int count_digits(long long n) {
     return (int)floor(log10((long double)n)) + 1;
 }
 
-long long min_number_with_digits(int digits) {
-    if (digits <= 0)
-        return 0;
-    return (long long)pow(10, digits - 1);
-}
-
-long long max_number_with_digits(int digits) {
-    if (digits <= 0)
-        return 0;
-    return (long long)pow(10, digits) - 1;
-}
-
 bool is_repetition(long long n) {
     char s[32];
     sprintf(s, "%lld", n);
