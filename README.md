@@ -5,13 +5,13 @@ You can find the challanges [here](https://adventofcode.com).
 
 The repo is structured as follows:
 ```
-problem-one/
+problem-1/
     first-star/
         solution.c
     second-star/
         solution.c
 
-problem-two/
+problem-2/
     first-star/
         solution.c
     second-star/
